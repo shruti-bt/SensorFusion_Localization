@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 810" width="1000" height="810" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4b5563"/></marker></defs>
+<rect width="1000" height="810" fill="#ffffff"/>
+<text x="500" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">How the localization works</text>
+<rect x="30" y="52" width="940" height="128" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+<circle cx="62" cy="80" r="14" fill="#6b7280"/>
+<text x="62" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">1</text>
+<text x="86" y="85" font-size="15" font-weight="700" fill="#111827">Align everything in time</text>
+<text x="50" y="110" font-size="12.5" fill="#374151">Image times are the common clock.</text>
+<text x="50" y="127" font-size="12.5" fill="#374151">Roll, pitch, depth and DVL are interpolated to the image</text>
+<text x="50" y="144" font-size="12.5" fill="#374151">times (samples further than 0.5 s away are ignored).</text>
+<text x="50" y="161" font-size="12.5" fill="#374151">Each UGPS fix is placed between its two neighbouring images.</text>
+<rect x="520" y="64" width="435" height="104" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+<text x="534" y="90" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">fix at time t, between images k and k+1:</text>
+<text x="534" y="109" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">w = (t - t_k) / (t_k+1 - t_k)</text>
+<text x="534" y="128" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">p(t) = (1 - w) p_k + w p_k+1</text>
+<text x="534" y="147" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#075985">p_loc = p(t) + R_wb l      (l = locator lever arm)</text>
+<line x1="500" y1="181" x2="500" y2="193" stroke="#4b5563" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="30" y="194" width="940" height="128" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+<circle cx="62" cy="222" r="14" fill="#6b7280"/>
+<text x="62" y="227" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">2</text>
+<text x="86" y="227" font-size="15" font-weight="700" fill="#111827">Turn the dead-reckoning sensors into measurements</text>
+<text x="50" y="252" font-size="12.5" fill="#374151">ZED: relative rotation and translation between images,</text>
+<text x="50" y="269" font-size="12.5" fill="#374151">with sigma divided by the tracking quality.</text>
+<text x="50" y="286" font-size="12.5" fill="#374151">DVL: body velocity integrated over each image interval.</text>
+<text x="50" y="303" font-size="12.5" fill="#374151">IMU: roll, pitch give the gravity direction. Pressure gives depth.</text>
+<rect x="520" y="206" width="435" height="104" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+<text x="534" y="232" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">ZED    dR, dt from poses.txt     (sigma / quality)</text>
+<text x="534" y="251" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">DVL    d = integral of v dt      (body frame)</text>
+<text x="534" y="270" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">IMU    g_b = R_wb^T d_w          (from roll, pitch)</text>
+<text x="534" y="289" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">Depth  z = p . d_w + b           (b = depth offset)</text>
+<line x1="500" y1="323" x2="500" y2="335" stroke="#4b5563" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="30" y="336" width="940" height="128" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+<circle cx="62" cy="364" r="14" fill="#6b7280"/>
+<text x="62" y="369" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">3</text>
+<text x="86" y="369" font-size="15" font-weight="700" fill="#111827">Initial alignment of the map frame to the receiver frame</text>
+<text x="50" y="394" font-size="12.5" fill="#374151">The map frame (first image, gravity down) is rotated so its</text>
+<text x="50" y="411" font-size="12.5" fill="#374151">down axis matches the receiver&#x27;s down axis (Rg). Then yaw psi</text>
+<text x="50" y="428" font-size="12.5" fill="#374151">and translation t_a are fitted between the dead-reckoned</text>
+<text x="50" y="445" font-size="12.5" fill="#374151">locator positions and the fixes.</text>
+<rect x="520" y="348" width="435" height="104" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+<text x="534" y="374" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#075985">A = Rg . Rz(psi)        p_rx = A p_map + t_a</text>
+<text x="534" y="393" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">psi: 2D Kabsch fit in the horizontal plane</text>
+<text x="534" y="412" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">t_a = mean(z) - A . mean(p)</text>
+<text x="534" y="431" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">3 passes, drop residuals &gt; 3 x median (outliers)</text>
+<line x1="500" y1="465" x2="500" y2="477" stroke="#4b5563" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="30" y="478" width="940" height="150" rx="12" fill="#f0f9ff" stroke="#0369a1" stroke-width="2"/>
+<circle cx="62" cy="506" r="14" fill="#0369a1"/>
+<text x="62" y="511" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">4</text>
+<text x="86" y="511" font-size="15" font-weight="700" fill="#111827">Joint robust optimisation (the core step)</text>
+<text x="50" y="536" font-size="12.5" fill="#374151">Unknowns: a pose per image, depth offset b, yaw psi and</text>
+<text x="50" y="553" font-size="12.5" fill="#374151">translation t_a. All factors are solved together by sparse</text>
+<text x="50" y="570" font-size="12.5" fill="#374151">trust-region least squares. Every residual is divided by its</text>
+<text x="50" y="587" font-size="12.5" fill="#374151">sigma and passed through a Huber loss, so acoustic outliers</text>
+<text x="50" y="604" font-size="12.5" fill="#374151">cannot dominate. The UGPS factor is what removes the drift.</text>
+<rect x="520" y="490" width="435" height="126" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+<text x="534" y="516" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">ZED      log(dR_m^T dR),  R_i^T (C_j - C_i) - dt</text>
+<text x="534" y="535" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">DVL      R_wb,i^T (p_i+1 - p_i) - d</text>
+<text x="534" y="554" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">Gravity  R_wb^T d_w - g_b</text>
+<text x="534" y="573" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">Depth    p . d_w + b - z</text>
+<text x="534" y="592" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#075985">UGPS     A p_loc + t_a - z,  sigma = max(floor, std)</text>
+<text x="534" y="611" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">+ anchor on image 0, weak prior on psi and t_a</text>
+<line x1="500" y1="629" x2="500" y2="641" stroke="#4b5563" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="30" y="642" width="940" height="128" rx="12" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+<circle cx="62" cy="670" r="14" fill="#6b7280"/>
+<text x="62" y="675" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">5</text>
+<text x="86" y="675" font-size="15" font-weight="700" fill="#111827">Ship frame and uncertainty</text>
+<text x="50" y="700" font-size="12.5" fill="#374151">The estimated alignment and the known receiver mounting give</text>
+<text x="50" y="717" font-size="12.5" fill="#374151">the ROV pose in the ship frame for every image. The uncertainty</text>
+<text x="50" y="734" font-size="12.5" fill="#374151">comes from the solver&#x27;s Jacobian and includes the uncertainty</text>
+<text x="50" y="751" font-size="12.5" fill="#374151">of the alignment, not only of the pose.</text>
+<rect x="520" y="654" width="435" height="104" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+<text x="534" y="680" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">p_ship = R_ship_rx (A p + t_a) + t_ship_rx</text>
+<text x="534" y="699" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">R_ship_body = R_ship_rx . A . R_wb</text>
+<text x="534" y="718" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">cov = G H^-1 G^T,     H = J^T J</text>
+<text x="534" y="737" style="white-space:pre" xml:space="preserve" font-size="12" font-family="Menlo, Consolas, DejaVu Sans Mono, monospace" fill="#374151">output: x y z roll pitch yaw + 1-sigma (rov_ship.csv)</text>
+<text x="500" y="798" text-anchor="middle" font-size="12" fill="#4b5563">Sensors: ZED Mini VIO, DVL, ROV IMU, pressure sensor, Water Linked Underwater GPS (blue). No compass. Tested in simulation only.</text>
+</svg>
